@@ -36,3 +36,18 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     a2
   }
 }
+
+class ReadmeSpec  extends FlatSpec with Matchers {
+  "QuadTree" should "work as advertized in the readme" in {
+
+    val readmeCode = {
+      import com.boldradius.lambdarange._
+      val elements = List(
+        Element("Here", 0.5f, 0.2f),
+        Element("There", 0.1f, 0.1f))
+      val tree = QuadTree(elements, 0, 1, 0, 1)
+      tree.inRadius(0.2f, (0.4f, 0.2f))
+    }
+    readmeCode.toList should equal(List(Element("Here", 0.5f, 0.2f)))
+  }
+}
