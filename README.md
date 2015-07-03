@@ -15,9 +15,9 @@ Then import the package, instantiate a QuadTree with a Seq of elements and a 2D 
     import com.boldradius.lambdarange._
 
     val elements = List(
-      Element("Here", 0.5f, 0.2f), 
+      Element("Here", 0.5f, 0.2f),
       Element("There", 0.1f, 0.1f))
     val tree = QuadTree(elements, 0, 1, 0, 1)
-    tree.inRadius(0.2f, 0.4f, 0.2)
+    tree.inRadius(0.2f, (0.4f, 0.2f))
     
     // Returns Array(Element(Here,0.5,0.2))
