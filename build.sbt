@@ -2,7 +2,7 @@ import sbtrelease.ReleasePlugin.ReleaseKeys._
 
 import sbtrelease.ReleasePlugin._
 
-name := """brome"""
+name := """lambda-range"""
 
 useGlobalVersion := false
 
