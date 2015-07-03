@@ -1,4 +1,4 @@
-package com.boldradius.brome
+package com.boldradius.lambdarange
 
 import QuadNode._
 

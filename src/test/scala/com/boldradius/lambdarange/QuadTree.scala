@@ -1,6 +1,6 @@
-package com.boldradius.brome
+package com.boldradius.lambdarange
 
-import com.boldradius.brome.QuadNode.square
+import com.boldradius.lambdarange.QuadNode.square
 import org.scalatest._
 
 import scala.util.Random
