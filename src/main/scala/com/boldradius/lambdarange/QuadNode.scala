@@ -3,7 +3,7 @@ package com.boldradius.lambdarange
 import QuadNode._
 
 sealed trait QuadNode[A] {
-  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float) : QuadNode[A]
+  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float, depth: Int) : QuadNode[A]
   final def inRadiusSquared(r2: Float, x: Float, y: Float, minX: Float, maxX: Float, minY: Float, maxY: Float) : Vector[Array[Element[A]]] = {
     val xDist = if (x < minX) square(x - minX) else if (x > maxX) square(x - maxX) else 0
     val yDist = if (y < minY) square(y - minY) else if (y > maxY) square(y - maxY) else 0
@@ -13,9 +13,9 @@ sealed trait QuadNode[A] {
   def inRadiusSquaredInside(r2: Float, x: Float, y: Float, minX: Float, maxX: Float, minY: Float, maxY: Float) : Vector[Array[Element[A]]]
 }
 case class Leaf[A](a: Array[Element[A]]) extends QuadNode[A] {
-  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float) : QuadNode[A] =
-    if (a.length < maxBinSize) Leaf[A](a :+ e)
-    else split(minX, maxX, minY, maxY).add(e, minX, maxX, minY, maxY)
+  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float, depth: Int) : QuadNode[A] =
+    if (a.length < maxBinSize || depth > maxDepth) Leaf[A](a :+ e)
+    else split(minX, maxX, minY, maxY).add(e, minX, maxX, minY, maxY, depth)
 
   final def split(minX: Float, maxX: Float, minY: Float, maxY: Float) = {
     val midX = (minX + maxX) * 0.5f
@@ -36,13 +36,13 @@ case class Leaf[A](a: Array[Element[A]]) extends QuadNode[A] {
   }
 }
 case class Quad[A](lowXLowY: QuadNode[A], lowXHighY: QuadNode[A], highXLowY: QuadNode[A], highXHighY: QuadNode[A], midX: Float, midY: Float) extends QuadNode[A] {
-  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float) : QuadNode[A] = {
+  def add(e: Element[A], minX: Float, maxX: Float, minY: Float, maxY: Float, depth: Int) : QuadNode[A] = {
     if (e.x <= midX)
-      if (e.y <= midY) copy(lowXLowY = lowXLowY.add(e, minX, midX, minY, midY))
-      else copy(lowXHighY = lowXHighY.add(e, minX, midX, midY, maxY))
+      if (e.y <= midY) copy(lowXLowY = lowXLowY.add(e, minX, midX, minY, midY, depth+1))
+      else copy(lowXHighY = lowXHighY.add(e, minX, midX, midY, maxY, depth+1))
     else
-    if (e.y <= midY) copy(highXLowY = highXLowY.add(e, midX, maxX, minY, midY))
-    else copy(highXHighY = highXHighY.add(e, midX, maxX, midY, maxY))
+    if (e.y <= midY) copy(highXLowY = highXLowY.add(e, midX, maxX, minY, midY, depth+1))
+    else copy(highXHighY = highXHighY.add(e, midX, maxX, midY, maxY, depth+1))
   }
   def inRadiusSquaredInside(r2: Float, x: Float, y: Float, minX: Float, maxX: Float, minY: Float, maxY: Float) : Vector[Array[Element[A]]] = {
     lowXLowY.inRadiusSquared(r2, x, y, minX, midX, minY, midY) ++
@@ -54,5 +54,6 @@ case class Quad[A](lowXLowY: QuadNode[A], lowXHighY: QuadNode[A], highXLowY: Qua
 
 object QuadNode {
   private[lambdarange] val maxBinSize = 200
+  private[lambdarange] val maxDepth = 14
   private[lambdarange] def square(x: Float) : Float = x * x
 }

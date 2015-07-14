@@ -7,7 +7,7 @@ import com.boldradius.lambdarange.QuadNode._
  */
 case class QuadTree[A](node: QuadNode[A], minX: Float, maxX: Float, minY: Float, maxY: Float) {
   def add(e: Element[A]): QuadTree[A] =
-    copy(node = node.add(e, minX, maxX, minY, maxY))
+    copy(node = node.add(e, minX, maxX, minY, maxY, 0))
 
   def inRadius(radius: Float, center: (Float, Float))(implicit ord: Ordering[A]) : Array[Element[A]] =
     node.inRadiusSquared(radius * radius, center._1, center._2, minX, maxX, minY, maxY).toArray.flatten
