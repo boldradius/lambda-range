@@ -53,6 +53,6 @@ case class Quad[A](lowXLowY: QuadNode[A], lowXHighY: QuadNode[A], highXLowY: Qua
 }
 
 object QuadNode {
-  val maxBinSize = 200
-  def square(x: Float) : Float = x * x
+  private[lambdarange] val maxBinSize = 200
+  private[lambdarange] def square(x: Float) : Float = x * x
 }

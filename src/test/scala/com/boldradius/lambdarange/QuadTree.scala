@@ -23,6 +23,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
       logTime("sort", java.util.Arrays.sort(result, new Ordering[Element[Int]] {
         override def compare(x: Element[Int], y: Element[Int]): Int = x.a - y.a
       }))
+      val squaredDistances = logTime("sortByDistance", sort.SquaredDistanceSort.sortElements(result, queryCenter))
       val sameQueryWithoutQuadTree = elements.filter(e => square(e.x - queryCenter._1) + square(e.y - queryCenter._2) <= queryR * queryR).toVector.sortBy(_.a)
       result should ===(sameQueryWithoutQuadTree)
       println(s"query: $q, found ${result.length} elements")
