@@ -8,7 +8,7 @@ Add a resolver and the library dependency to your sbt project (this resolver typ
 
     resolvers += Resolver.bintrayRepo("boldradiussolutions", "maven")
 
-    libraryDependencies += "com.boldradius" %% "lambda-range" % "0.1.2"
+    libraryDependencies += "com.boldradius" %% "lambda-range" % "0.1.3"
 
 Then import the package, instantiate a QuadTree with a Seq of elements and a 2D range, and perform queries like this:
 
